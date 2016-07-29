@@ -1,0 +1,19 @@
+#!/bin/bash
+#Graph number of members of netfilter ipsets
+#(c) Tomas Mudrunka 2016
+
+[ "$1" = "config" ] && {
+	echo graph_title Netfilter IPSets
+	echo graph_category network
+	echo graph_vlabel Members
+}
+
+ipset list -n | while read list; do
+	[ "$1" = "config" ] && {
+		echo "$list.label $list"
+	} || {
+		echo "$list.value $(( $(ipset list $list | wc -l) - 7 ))"
+	}
+done;
+
+exit 0
